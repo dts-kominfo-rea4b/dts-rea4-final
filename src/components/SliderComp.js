@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Carousel } from "react-bootstrap";
-import img from "../img1.jpg";
 import axios from "../api/Axios";
 
 
