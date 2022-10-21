@@ -1,12 +1,11 @@
-import "./App.css";
-import Home from "./containers/Home";
+import './App.css';
+import Home from './containers/Home';
+import { Box } from '@mui/material';
 
-function App() {
+export default function App() {
   return (
-    <>
+    <Box className='app'>
       <Home />
-    </>
+    </Box>
   );
 }
-
-export default App;
