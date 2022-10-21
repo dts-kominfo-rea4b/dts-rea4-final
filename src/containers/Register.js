@@ -10,13 +10,13 @@ const Register = () => {
     const [message, setMessage] = useState("");
     const navigate = useNavigate();
 
-    const handleSubmit = async () => {
+    const register = async () => {
         try {
             await createUserWithEmailAndPassword(auth, email, password);
 
             navigate("/");
         } catch (error) {
-            setMessage("Email must be in email format or password must be more than 6 characters");
+            setMessage("Email must be in email type or password must be more than 6 characters");
         }
     };
 
@@ -27,7 +27,7 @@ const Register = () => {
                     <div className="col-12 col-md-8 col-lg-6 col-xl-5">
                         <div className="card bg-dark text-white">
                             <div className="card-body p-5 text-center">
-                                <div className="mb-md-5 mt-md-4 pb-5">
+                                <div className="mt-md-4 pb-5">
                                     <h2 className="fw-bold mb-2 text-uppercase">Register</h2>
                                     <p className="text-white-50 mb-5">Please enter your email and password!</p>
 
@@ -47,7 +47,7 @@ const Register = () => {
 
                                     <p className="mb-5 pb-lg-2 text-danger">{message}</p>
 
-                                    <button className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleSubmit}>
+                                    <button className="btn btn-outline-light btn-lg px-5" type="submit" onClick={register}>
                                         Register
                                     </button>
                                 </div>

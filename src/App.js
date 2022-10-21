@@ -10,11 +10,11 @@ import { Button } from "react-bootstrap";
 function App() {
     const [user] = useAuthState(auth);
 
-    const handleLogout = async () => {
+    const logout = async () => {
         try {
             await signOut(auth);
         } catch (error) {
-            console.log(error);
+            console.log(error.message);
         }
     };
 
@@ -27,12 +27,12 @@ function App() {
                         <div>
                             <h1>Home {user ? user.email : "Page"}</h1>
                             {user ? (
-                                <Button onClick={handleLogout}>
+                                <Button onClick={logout}>
                                     <h2>logout</h2>
                                 </Button>
                             ) : (
                                 <Link to="/login">
-                                    <Button onClick={handleLogout}>
+                                    <Button>
                                         <h2>login</h2>
                                     </Button>
                                 </Link>
