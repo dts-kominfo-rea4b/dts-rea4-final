@@ -20,13 +20,13 @@ const SliderComp = (props) => {
     return (
         <Carousel fade>
         
-            { movies.slice(0,10).map(movie => {
+            { movies.slice(0,10).map((movie, index) => {
                 return (
-                    <Carousel.Item>
+                    <Carousel.Item key={index}>
                     <img
                     className="d-block w-100 "
                     src={`${image_path}${movie.backdrop_path}`}
-                    alt={movie.original_title}
+                    alt={movie.title}
                     style={{ height: '70vh' }}
                     />
                     <Carousel.Caption>
