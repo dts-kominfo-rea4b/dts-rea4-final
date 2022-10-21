@@ -1,8 +1,26 @@
 import { Form } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../configs/firebase";
 
 const Login = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+
+            navigate("/");
+        } catch (error) {
+            setMessage("Wrong email or password");
+        }
+    };
+
     return (
         <section className="vh-100 gradient-custom" style={{ backgroundImage: "radial-gradient(circle,#b9090b,#141414)" }}>
             <div className="container py-5 h-100">
@@ -15,26 +33,22 @@ const Login = () => {
                                     <p className="text-white-50 mb-5">Please enter your email and password!</p>
 
                                     <div className="form-outline form-white mb-4">
-                                        <label className="form-label" htmlFor="typeEmailX">
+                                        <label className="form-label" htmlFor="email">
                                             Email
                                         </label>
-                                        <input type="email" id="typeEmailX" className="form-control form-control-lg" />
+                                        <input type="email" id="email" className="form-control form-control-lg" onChange={({ target }) => setEmail(target.value)} />
                                     </div>
 
                                     <div className="form-outline form-white mb-4">
-                                        <label className="form-label" htmlFor="typePasswordX">
+                                        <label className="form-label" htmlFor="password">
                                             Password
                                         </label>
-                                        <input type="password" id="typePasswordX" className="form-control form-control-lg" />
+                                        <input type="password" id="password" className="form-control form-control-lg" onChange={({ target }) => setPassword(target.value)} />
                                     </div>
 
-                                    <p className="small mb-5 pb-lg-2">
-                                        <a className="text-white-50" href="#!">
-                                            Forgot password?
-                                        </a>
-                                    </p>
+                                    <p className="mb-5 pb-lg-2 text-danger">{message}</p>
 
-                                    <button className="btn btn-outline-light btn-lg px-5" type="submit">
+                                    <button className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleSubmit}>
                                         Login
                                     </button>
                                 </div>

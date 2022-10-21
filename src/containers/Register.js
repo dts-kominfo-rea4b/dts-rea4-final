@@ -1,7 +1,25 @@
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../configs/firebase";
 
 const Register = () => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = async () => {
+        try {
+            await createUserWithEmailAndPassword(auth, email, password);
+
+            navigate("/");
+        } catch (error) {
+            setMessage("Email must be in email format or password must be more than 6 characters");
+        }
+    };
+
     return (
         <section className="vh-100 gradient-custom" style={{ backgroundImage: "radial-gradient(circle,#b9090b,#141414)" }}>
             <div className="container py-5 h-100">
@@ -17,21 +35,19 @@ const Register = () => {
                                         <label className="form-label" htmlFor="typeEmailX">
                                             Email
                                         </label>
-                                        <input type="email" id="typeEmailX" className="form-control form-control-lg" />
+                                        <input type="email" id="typeEmailX" className="form-control form-control-lg" onChange={({ target }) => setEmail(target.value)} />
                                     </div>
 
                                     <div className="form-outline form-white mb-4">
                                         <label className="form-label" htmlFor="typePasswordX">
                                             Password
                                         </label>
-                                        <input type="password" id="typePasswordX" className="form-control form-control-lg" />
+                                        <input type="password" id="typePasswordX" className="form-control form-control-lg" onChange={({ target }) => setPassword(target.value)} />
                                     </div>
 
-                                    <p className="small mb-5 pb-lg-2">
-                                        <span className="text-white-50">{/* message here */}</span>
-                                    </p>
+                                    <p className="mb-5 pb-lg-2 text-danger">{message}</p>
 
-                                    <button className="btn btn-outline-light btn-lg px-5" type="submit">
+                                    <button className="btn btn-outline-light btn-lg px-5" type="submit" onClick={handleSubmit}>
                                         Register
                                     </button>
                                 </div>
