@@ -1,11 +1,24 @@
 import './App.css';
-import Home from './containers/Home';
-import { Box } from '@mui/material';
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
-export default function App() {
+import { ThemeProvider } from '@mui/material';
+import { Outlet } from 'react-router-dom';
+
+import theme from './themes/theme';
+import Header from './components/Header';
+
+function App() {
   return (
-    <Box className='app'>
-      <Home />
-    </Box>
+    <ThemeProvider theme={theme}>
+      <div className='App'>
+        <Header />
+        <Outlet />
+      </div>
+    </ThemeProvider>
   );
 }
+
+export default App;
