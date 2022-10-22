@@ -1,16 +1,11 @@
-import 'dotenv/config';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const initialState = { searchMovie: '', error: '', isLoading: false };
-
-const BASE_URL = 'https://api.themoviedb.org/3/';
-
-const trendingMovieAsync = createAsyncThunk(
-  'movie/fetch_trending_movie',
+const latestMovieAsync = createAsyncThunk(
+  'movie/fetch_latest_movie',
   async () => {
     const { data: axiosData } = await axios.get(
-      `${BASE_URL}trending/all/day?api_key=${process.env.REACT_APP_TMDB_KEY}`
+      `${process.env.REACT_APP_TMDB_BASE_URL}movie/latest?api_key=${process.env.REACT_APP_TMDB_KEY}`
     );
     return axiosData.data;
   }
@@ -18,26 +13,25 @@ const trendingMovieAsync = createAsyncThunk(
 
 const movieSlice = createSlice({
   name: 'movie',
-  initialState,
+  initialState: {},
   reducers: {
     search: (state, action) => {
       state.searchMovie = action.payload.amount;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(trendingMovieAsync.rejected, (state, error) => {
-      console.log(state);
-      console.log(error);
-      state.error = error.message;
-      state.isLoading = false;
-    });
-    builder.addCase(trendingMovieAsync.pending, (state) => {
-      state.isLoading = false;
-    });
-    builder.addCase(trendingMovieAsync.fulfilled, (state, action) => {
-      state.trendingMovie = action.payload;
-      state.isLoading = false;
-    });
+    builder
+      .addCase(latestMovieAsync.rejected, (state, error) => {
+        state.error = error.message;
+        state.loading = false;
+      })
+      .addCase(latestMovieAsync.pending, (state) => {
+        state.loading = false;
+      })
+      .addCase(latestMovieAsync.fulfilled, (state, action) => {
+        state.trendingMovie = action.payload;
+        state.loading = false;
+      });
   },
 });
 
