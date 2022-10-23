@@ -3,20 +3,21 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
-
-import { ThemeProvider } from '@mui/material';
-import { Outlet } from 'react-router-dom';
-
+import { Paper, ThemeProvider } from '@mui/material';
 import theme from './themes/theme';
-import Header from './components/Header';
+import { Outlet } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import { CookiesProvider } from 'react-cookie';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <div className='App'>
-        <Header />
-        <Outlet />
-      </div>
+      <CookiesProvider>
+        <Paper className='App'>
+          <Navbar />
+          <Outlet />
+        </Paper>
+      </CookiesProvider>
     </ThemeProvider>
   );
 }
