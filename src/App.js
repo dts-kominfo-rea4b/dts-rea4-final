@@ -1,25 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import request from "./api/Api";
+import app from "./api/Axios";
+import "./App.css";
+import NavbarComp from "./components/NavbarComp";
+import SliderComp from "./components/SliderComp";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div className="App">
+            <NavbarComp />
+            <SliderComp url={app.getUri() + request.fetchNowPlaying} />
+        </div>
+    );
 }
 
-export default App
+export default App;
