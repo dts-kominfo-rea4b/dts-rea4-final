@@ -6,7 +6,7 @@ import { NewsHeroCard } from '../components/NewsHeroCard'
 
 export const NewsList = () => {
   return (
-    <section className="news-list" style={{ marginTop: '30px' }}>
+    <section className="news-list" style={{ padding: '30px 0' }}>
       <Typography variant="h1" sx={{ fontSize: '38px', mb: 2 }}>Hot Topics</Typography>
       <Grid container spacing={2}>
         <Grid xs={9}>
