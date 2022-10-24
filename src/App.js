@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import NavbarComp from './components/NavbarComp';
+import SliderComp from './components/SliderComp';
+import api from "../src/api/Api";
+import CardComp from './components/CardComp';
+import CardRankComp from './components/CardRankComp';
+import Footer from './components/Footer';
 
-function App() {
+
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <NavbarComp/>
+      <SliderComp url={api.fetchTrending}/>
+      <CardComp title="Now Playing" url={api.fetchNowPlaying}/>
+      <CardComp title="Popular" url={api.fetchTrending}/>
+      <CardRankComp title="Up Coming" url={api.fetchUpComing}/>
+      <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
