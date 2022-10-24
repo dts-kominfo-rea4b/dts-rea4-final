@@ -1,12 +1,69 @@
-import { Box, CardMedia, Rating } from "@mui/material";
+import { Box, Button, CardMedia, Rating } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import { Dialog } from "@mui/material";
+import { DialogTitle } from "@mui/material";
+import { DialogContent } from "@mui/material";
+import { IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+
+import { useState } from "react";
+
 import * as React from "react";
+
+
 
 const BASE_IMAGE_URL = "http://image.tmdb.org/t/p/original";
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
+function BootstrapDialogTitle(props) {
+  const { children, onClose, ...other } = props;
+
+  return (
+    <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: "absolute",
+            right: 8,
+            top: 8,
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  );
+}
+
+BootstrapDialogTitle.propTypes = {
+  children: PropTypes.node,
+  onClose: PropTypes.func.isRequired,
+};
+
 const MovieCard = ({ movie }) => {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   return (
     <Card
       id={movie.id}
@@ -39,14 +96,14 @@ const MovieCard = ({ movie }) => {
             color="text.secondary"
             component="div"
           >
+            {" "}
+            <b>Year :</b>
             {new Date(movie.release_date).getFullYear()}
           </Typography>
-          <Box
-            sx={{
-              width: 200,
-              display: "flex",
-              alignItems: "center",
-            }}
+          <Typography
+            variant="subtitle1"
+            color="text.secondary"
+            component="div"
           >
             <Rating
               name="read-only"
@@ -56,7 +113,37 @@ const MovieCard = ({ movie }) => {
               readOnly
             />
             <Box sx={{ ml: 2 }}>{movie.vote_average}</Box>
-          </Box>
+          </Typography>
+
+          <div className="DetailsButton">
+            <Button
+              variant="contained"
+              onClick={handleClickOpen}
+              sx={{
+                mt: 4,
+                
+              }}
+            >
+              Detail
+            </Button>
+            <BootstrapDialog
+              onClose={handleClose}
+              aria-labelledby="customized-dialog-title"
+              open={open}
+            >
+              <BootstrapDialogTitle
+                id="customized-dialog-title"
+                onClose={handleClose}
+              >
+                Sinopsis
+              </BootstrapDialogTitle>
+              <DialogContent dividers>
+                <Typography gutterBottom sx={{ textAlign: "justify" }}>
+                  {movie.overview}
+                </Typography>
+              </DialogContent>
+            </BootstrapDialog>
+          </div>
         </CardContent>
       </Box>
     </Card>
