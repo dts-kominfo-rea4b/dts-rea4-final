@@ -1,17 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
-import MenuItem from '@mui/material/MenuItem';
-import Menu from '@mui/material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
-import { Button, Stack } from '@mui/material';
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  IconButton,
+  Typography,
+  InputBase,
+  MenuItem,
+  Menu,
+  Button,
+  Stack,
+} from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCookie, selectUserCredential } from '../reducers/userSlice';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -54,6 +59,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
+  const user = useSelector(selectUserCredential);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCookie('user'));
+  });
+  console.log(user);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
   // eslint-disable-next-line no-unused-vars
@@ -135,18 +148,36 @@ function Navbar() {
 
   const pages = ['Movies', 'TV Shows'];
 
+  const hideSignUpAndSignInButton = <Box></Box>;
+  const showSignUpAndSignInButton = (
+    <Stack spacing={2} direction='row'>
+      <Link to='/sign_in'>
+        <Button sx={{ backgroundColor: '#334155' }} variant='contained'>
+          Login
+        </Button>
+      </Link>
+      <Link to='/sign_up'>
+        <Button sx={{ backgroundColor: '#334155' }} variant='contained'>
+          Register
+        </Button>
+      </Link>
+    </Stack>
+  );
+
   return (
-    <Box className='Navbar-box' sx={{ flexGrow: 1 }}>
-      <AppBar position='static' className='Navbar-box'>
-        <Toolbar className='Navbar-box'>
-          <Typography
-            variant='h6'
-            noWrap
-            component='div'
-            sx={{ display: { xs: 'none', sm: 'block' } }}
-          >
-            MUI
-          </Typography>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position='static'>
+        <Toolbar>
+          <Link to='/' style={{ color: 'inherit', textDecoration: 'none' }}>
+            <Typography
+              variant='h6'
+              noWrap
+              component='div'
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+            >
+              Raw-ten Tomatoes
+            </Typography>
+          </Link>
           <Search>
             <SearchIconWrapper>
               <SearchIcon />
@@ -169,14 +200,11 @@ function Navbar() {
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-            <Stack spacing={2} direction='row'>
-              <Link to='/sign_in'>
-                <Button variant='contained'>Login</Button>
-              </Link>
-              <Link to='/sign_up'>
-                <Button variant='contained'>Register</Button>
-              </Link>
-            </Stack>
+            {window.location.pathname === '/sign_up' ||
+            window.location.pathname === '/sign_in' ||
+            !!user
+              ? hideSignUpAndSignInButton
+              : showSignUpAndSignInButton}
           </Box>
         </Toolbar>
       </AppBar>

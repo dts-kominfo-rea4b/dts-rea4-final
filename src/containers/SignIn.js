@@ -4,13 +4,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import {
+  signInAsync,
   selectErrorSignUp,
   selectUserCredential,
   setCookie,
-  signUpAsync,
+  removeCookie,
 } from '../reducers/userSlice';
 
-function SignUp() {
+function SignIn() {
   const userCredential = useSelector(selectUserCredential);
   const errorSignUp = useSelector(selectErrorSignUp);
 
@@ -22,12 +23,13 @@ function SignUp() {
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
-    dispatch(signUpAsync({ email, password }));
+    dispatch(signInAsync({ email, password }));
     const user = userCredential;
     console.log(user);
 
     if (user) {
-      dispatch(setCookie('user'));
+      // dispatch(removeCookie('user'));
+      // dispatch(setCookie('user'));
       navigate('/');
     }
   };
@@ -36,7 +38,7 @@ function SignUp() {
     <Box>
       <Navbar />
       <Typography component='h1' variant='h5'>
-        Sign up
+        Sign in
       </Typography>
       <Box component='form' noValidate onSubmit={handleSubmit}>
         <Grid container spacing={2}>
@@ -70,7 +72,7 @@ function SignUp() {
           variant='contained'
           sx={{ mt: 3, mb: 2, backgroundColor: '#334155' }}
         >
-          Sign Up
+          Sign in
         </Button>
         <Grid container justifyContent='center'>
           <Grid>
@@ -79,12 +81,12 @@ function SignUp() {
               to='/sign_in'
               style={{ color: 'inherit', textDecoration: 'inherit' }}
             >
-              Already have an account? <br />
+              Don't have an account? <br />
               <Button
                 variant='contained'
                 sx={{ mt: 3, mb: 2, backgroundColor: '#334155' }}
               >
-                Sign in
+                Sign up
               </Button>
             </Link>
           </Grid>
@@ -94,4 +96,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignIn;

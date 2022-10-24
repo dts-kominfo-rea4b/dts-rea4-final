@@ -6,18 +6,13 @@ import '@fontsource/roboto/700.css';
 import { Paper, ThemeProvider } from '@mui/material';
 import theme from './themes/theme';
 import { Outlet } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import { CookiesProvider } from 'react-cookie';
 
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <CookiesProvider>
-        <Paper className='App'>
-          <Navbar />
-          <Outlet />
-        </Paper>
-      </CookiesProvider>
+      <Paper className='container-background'>
+        <Outlet />
+      </Paper>
     </ThemeProvider>
   );
 }
