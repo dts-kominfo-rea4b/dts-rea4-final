@@ -9,15 +9,13 @@ import { DialogTitle } from "@mui/material";
 import { DialogContent } from "@mui/material";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import axios from "axios";
 
 import { useState } from "react";
 
 import * as React from "react";
 
-
-
 const BASE_IMAGE_URL = "http://image.tmdb.org/t/p/original";
-
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
@@ -79,7 +77,7 @@ const MovieCard = ({ movie }) => {
         component="img"
         sx={{ width: 150, height: 225 }}
         image={`${BASE_IMAGE_URL}${movie.poster_path}`}
-        alt="Movie poster"
+        alt={movie.title}
       />
       <Box
         sx={{
@@ -115,13 +113,12 @@ const MovieCard = ({ movie }) => {
             <Box sx={{ ml: 2 }}>{movie.vote_average}</Box>
           </Typography>
 
-          <div className="DetailsButton">
+          <div>
             <Button
               variant="contained"
               onClick={handleClickOpen}
               sx={{
                 mt: 4,
-                
               }}
             >
               Detail
@@ -138,6 +135,13 @@ const MovieCard = ({ movie }) => {
                 Sinopsis
               </BootstrapDialogTitle>
               <DialogContent dividers>
+                {/* <CardMedia
+                  id={movie.id}
+                  component="video"
+                  image={BASE_VIDEO_URL}
+                  title={movie.title}
+                  controls
+                /> */}
                 <Typography gutterBottom sx={{ textAlign: "justify" }}>
                   {movie.overview}
                 </Typography>

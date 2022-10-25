@@ -11,6 +11,7 @@ import MovieList from "./containers/MovieList";
 import theme from "./themes/theme";
 
 
+
 function App() {
   return (
     <ThemeProvider theme={theme}>
