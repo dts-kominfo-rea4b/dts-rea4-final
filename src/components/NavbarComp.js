@@ -1,8 +1,9 @@
 import React from "react";
-import { Navbar, Container, Nav, Form, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Button, NavLink } from "react-bootstrap";
 import image from "../image.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUserCircle } from "@fortawesome/free-solid-svg-icons";
+import { faUserCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
+import { Link } from "react-router-dom";
 
 const NavbarComp = () => {
   return (
@@ -19,23 +20,44 @@ const NavbarComp = () => {
         </Navbar.Brand>
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Series</Nav.Link>
-            <Nav.Link href="#pricing">Movies</Nav.Link>
+            <NavLink>
+              <Link
+                to="/"
+                className="text-light"
+                style={{ textDecoration: "none" }}
+              >
+                Home
+              </Link>
+            </NavLink>
+            <NavLink>
+              <Link
+                to="/movies"
+                className="text-light"
+                style={{ textDecoration: "none" }}
+              >
+                Movies
+              </Link>
+            </NavLink>
           </Nav>
           <Nav>
-            <Form className="d-flex mx-2">
-              <Form.Control
-                type="search"
-                placeholder="Search"
-                className="me-2"
-                aria-label="Search"
-                variant="outline-danger"
-              />
-              <Button variant="outline-danger">Search</Button>
-            </Form>
+            <Button variant="outline-danger" className="me-2">
+            <Link
+                to="/login"
+                className="text-light"
+                style={{ textDecoration: "none" }}
+              >
+                Login <FontAwesomeIcon icon={faUserCircle} className="ms-3" />
+              </Link>
+              
+            </Button>
             <Button variant="outline-danger">
-              Login <FontAwesomeIcon icon={faUserCircle} className="ms-3" />
+              <Link
+                to="/search"
+                className="text-light"
+                style={{ textDecoration: "none" }}
+              >
+                Search <FontAwesomeIcon  icon={faSearch} className="ms-3" />
+              </Link>
             </Button>
           </Nav>
         </Navbar.Collapse>
