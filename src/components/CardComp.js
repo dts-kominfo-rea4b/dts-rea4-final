@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CardGroup, Card, Container, Row, Col, Image } from "react-bootstrap";
+import { CardGroup, Card, Container} from "react-bootstrap";
 import axios from "../api/Axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
