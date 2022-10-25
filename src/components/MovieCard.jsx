@@ -9,7 +9,7 @@ import { DialogTitle } from "@mui/material";
 import { DialogContent } from "@mui/material";
 import { IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import axios from "axios";
+
 
 import { useState } from "react";
 
@@ -65,6 +65,7 @@ const MovieCard = ({ movie }) => {
   return (
     <Card
       id={movie.id}
+      key={movie.id}
       sx={{
         display: "flex",
         width: 400,
