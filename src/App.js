@@ -1,14 +1,14 @@
 import './App.css';
 import { Navbar } from './components/Navbar';
-import { NewsList } from './containers/NewsList';
 import { Container, Typography, Box } from '@mui/material'
+import { Outlet } from 'react-router-dom';
 
 function App() {
   return (
     <div className="App">
       <Navbar />
       <Container maxWidth="xxl">
-        <NewsList />
+        <Outlet />
       </Container>
       <footer>
         <Box sx={{display: 'flex', backgroundColor: '#F8F8F8', justifyContent: 'center', alignItems: 'center', padding: '30px 0'}}>
