@@ -65,7 +65,6 @@ const MovieCard = ({ movie }) => {
   return (
     <Card
       id={movie.id}
-      key={movie.id}
       sx={{
         display: "flex",
         width: 400,
@@ -111,7 +110,7 @@ const MovieCard = ({ movie }) => {
               max={5}
               readOnly
             />
-            <Box sx={{ ml: 2 }}>{movie.vote_average}</Box>
+            <Box sx={{ ml: 2 }}>{movie.vote_average.toFixed(1)}</Box>
           </Typography>
 
           <div>

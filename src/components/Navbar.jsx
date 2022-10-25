@@ -15,7 +15,7 @@ const Navbar = () => {
         display: "flex",
       }}
     >
-      <AppBar component="nav">
+      <AppBar>
         <Toolbar>
           <MovieFilter sx={{ display: "flex", mr: 1 }} />
           <Typography
