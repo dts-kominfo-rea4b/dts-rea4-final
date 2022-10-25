@@ -6,8 +6,17 @@ import '@fontsource/roboto/700.css';
 import { Paper, ThemeProvider } from '@mui/material';
 import theme from './themes/theme';
 import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { authObserverAsync } from './reducers/userSlice';
+import { useDispatch } from 'react-redux';
 
 function App() {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(authObserverAsync());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <Paper className='container-background'>

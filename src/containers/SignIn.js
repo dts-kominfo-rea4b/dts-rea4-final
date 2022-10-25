@@ -1,37 +1,42 @@
 import { Box, Button, Grid, TextField, Typography } from '@mui/material';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import {
   signInAsync,
-  selectErrorSignUp,
+  selectErrorSignIn,
   selectUserCredential,
-  setCookie,
-  removeCookie,
+  setErrorSign,
 } from '../reducers/userSlice';
 
 function SignIn() {
   const userCredential = useSelector(selectUserCredential);
-  const errorSignUp = useSelector(selectErrorSignUp);
+  const errorSignIn = useSelector(selectErrorSignIn);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  let navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  useEffect(() => {
+    dispatch(setErrorSign());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (userCredential) {
+      navigate('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userCredential]);
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     const email = data.get('email');
     const password = data.get('password');
     dispatch(signInAsync({ email, password }));
-    const user = userCredential;
-    console.log(user);
 
-    if (user) {
-      // dispatch(removeCookie('user'));
-      // dispatch(setCookie('user'));
-      navigate('/');
-    }
+    userCredential.email && navigate('/');
   };
 
   return (
@@ -66,7 +71,7 @@ function SignIn() {
             />
           </Grid>
         </Grid>
-        <Typography color='red'>{errorSignUp}</Typography>
+        <Typography color='red'>{errorSignIn}</Typography>
         <Button
           type='submit'
           variant='contained'
@@ -76,19 +81,18 @@ function SignIn() {
         </Button>
         <Grid container justifyContent='center'>
           <Grid>
-            <Link
-              className='sign-in-ask'
-              to='/sign_in'
-              style={{ color: 'inherit', textDecoration: 'inherit' }}
+            Don't have an account? <br />
+            <Button
+              variant='contained'
+              sx={{ mt: 3, mb: 2, backgroundColor: '#334155' }}
             >
-              Don't have an account? <br />
-              <Button
-                variant='contained'
-                sx={{ mt: 3, mb: 2, backgroundColor: '#334155' }}
+              <Link
+                to='/sign_up'
+                style={{ color: 'inherit', textDecoration: 'inherit' }}
               >
                 Sign up
-              </Button>
-            </Link>
+              </Link>
+            </Button>
           </Grid>
         </Grid>
       </Box>

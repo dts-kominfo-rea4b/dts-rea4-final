@@ -1,10 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import {
   createUserWithEmailAndPassword,
+  onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut as userSignOut,
 } from 'firebase/auth';
-import Cookies from 'js-cookie';
 import { auth } from '../config/firebase';
 
 export const signUpAsync = createAsyncThunk(
@@ -30,17 +30,11 @@ export const signUpAsync = createAsyncThunk(
 
 export const signInAsync = createAsyncThunk(
   'user/sign_in',
-  async (email, password) => {
+  async ({ email, password }) => {
     try {
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      console.log(userCredential);
-      return userCredential;
+      const { user } = await signInWithEmailAndPassword(auth, email, password);
+      return user.providerData[0];
     } catch (error) {
-      console.log(error);
       throw new Error(error);
     }
   }
@@ -55,6 +49,21 @@ export const signOutAsync = createAsyncThunk('user/sign_out', async () => {
   }
 });
 
+export const authObserverAsync = createAsyncThunk(
+  'user/auth_observer',
+  async () =>
+    new Promise((resolve, reject) => {
+      const observeAuthState = onAuthStateChanged(auth, (user) => {
+        observeAuthState();
+        if (user) {
+          resolve(user.providerData[0]);
+        } else {
+          resolve(false);
+        }
+      });
+    })
+);
+
 const initialState = {
   userCredential: '',
   errorSignUp: '',
@@ -66,19 +75,13 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setCookie: (state, action) => {
-      Cookies.set(action.payload.cookieName, state.userCredential, {
-        expires: 1, // day
-        secure: true,
-        sameSite: 'strict',
-        path: '/', // all path
-      });
+    setUser: (state, action) => {
+      state.userCredential = action.payload.user;
     },
-    getCookie: (state, action) => {
-      state.userCredential = Cookies.get(action.payload.cookieName);
-    },
-    removeCookie: (state, action) => {
-      Cookies.remove(action.payload.cookieName);
+    setErrorSign: (state, action) => {
+      state.errorSignUp = '';
+      state.errorSignIn = '';
+      state.errorSignOut = '';
     },
   },
   extraReducers: (builder) => {
@@ -100,11 +103,17 @@ const userSlice = createSlice({
       })
       .addCase(signOutAsync.fulfilled, (state, action) => {
         state.userCredential = action.payload;
+      })
+      .addCase(authObserverAsync.rejected, (state, { error }) => {
+        state.errorSignOut = error.message.slice(25, 65);
+      })
+      .addCase(authObserverAsync.fulfilled, (state, action) => {
+        state.userCredential = action.payload ? action.payload : '';
       });
   },
 });
 
-export const { setCookie, getCookie, removeCookie } = userSlice.actions;
+export const { setUser, setErrorSign } = userSlice.actions;
 
 export const selectUserCredential = (state) => state.user.userCredential;
 export const selectErrorSignUp = (state) => state.user.errorSignUp;

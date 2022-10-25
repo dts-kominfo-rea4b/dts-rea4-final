@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
@@ -16,7 +16,7 @@ import {
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCookie, selectUserCredential } from '../reducers/userSlice';
+import { selectUserCredential, signOutAsync } from '../reducers/userSlice';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -59,13 +59,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
-  const user = useSelector(selectUserCredential);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getCookie('user'));
-  });
-  console.log(user);
+  const userCredential = useSelector(selectUserCredential);
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -92,6 +87,14 @@ function Navbar() {
     setAnchorElNav(null);
   };
 
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
     <Menu
@@ -109,8 +112,10 @@ function Navbar() {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleClose}>{userCredential?.email}</MenuItem>
+      <MenuItem onClick={() => handleClose(dispatch(signOutAsync()))}>
+        Sign out
+      </MenuItem>
     </Menu>
   );
 
@@ -148,17 +153,57 @@ function Navbar() {
 
   const pages = ['Movies', 'TV Shows'];
 
-  const hideSignUpAndSignInButton = <Box></Box>;
-  const showSignUpAndSignInButton = (
+  const profileButton = userCredential ? (
+    <div>
+      <IconButton
+        size='large'
+        aria-label='account of current user'
+        aria-controls='menu-appbar'
+        aria-haspopup='true'
+        onClick={handleMenu}
+        color='inherit'
+      >
+        <AccountCircle />
+      </IconButton>
+      <Menu
+        id='menu-appbar'
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        keepMounted
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
+      >
+        <MenuItem onClick={handleClose}>{userCredential.email}</MenuItem>
+        <MenuItem onClick={() => handleClose(dispatch(signOutAsync()))}>
+          <Link
+            to='/sign_up'
+            style={{ color: 'inherit', textDecoration: 'inherit' }}
+          >
+            Sign out
+          </Link>
+        </MenuItem>
+      </Menu>
+    </div>
+  ) : (
+    <Box />
+  );
+  const signUpAndSignInButton = (
     <Stack spacing={2} direction='row'>
       <Link to='/sign_in'>
         <Button sx={{ backgroundColor: '#334155' }} variant='contained'>
-          Login
+          Sign in
         </Button>
       </Link>
       <Link to='/sign_up'>
         <Button sx={{ backgroundColor: '#334155' }} variant='contained'>
-          Register
+          Sign up
         </Button>
       </Link>
     </Stack>
@@ -202,9 +247,9 @@ function Navbar() {
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             {window.location.pathname === '/sign_up' ||
             window.location.pathname === '/sign_in' ||
-            !!user
-              ? hideSignUpAndSignInButton
-              : showSignUpAndSignInButton}
+            !!userCredential
+              ? profileButton
+              : signUpAndSignInButton}
           </Box>
         </Toolbar>
       </AppBar>
